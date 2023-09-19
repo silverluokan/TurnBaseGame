@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.example.turnbasegame.Constants.PlayerName
 import com.example.turnbasegame.Enemy.Enemy_Bat
 import com.example.turnbasegame.Enemy.Enemy_Rat
 import com.example.turnbasegame.Enemy.Enemy_bslime
@@ -29,13 +30,16 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
     var PlayerDefense = 0
     var PlayerHeal = 0
     var PlayerStats = ""
-
+    var PlayerLevel = 0
+    var PlayerExpNeeded = 10
+    var PlayerExp = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameDashBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val player = Player("UserInput")
+        binding.PlayerName.text = player.Name
         PlayerCurrentHp = player.MaxHealthPoint
         playerMaxHp = player.MaxHealthPoint
         binding.playerhp.progress = (PlayerCurrentHp/player.MaxHealthPoint)*100
@@ -43,6 +47,8 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
         PlayerDamage = player.Damage
         PlayerHeal = player.Heal
         PlayerDefense = player.DefensePoint
+        PlayerLevel = player.Level
+        CharacterExp()
 
         binding.btnRoll.isEnabled = false
         binding.btnAttack.isEnabled = false
@@ -125,6 +131,7 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
         binding.btnAttack.isEnabled = false
         binding.btnDefend.isEnabled = false
         binding.btnHeal.isEnabled = false
+        binding.btnFindEnemy.isEnabled = true
     }
 
     fun FindEnemy(){
@@ -183,6 +190,9 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
         when(p0!!.id){
             (R.id.btnFindEnemy)->{
                 FindEnemy()
+                PlayerCurrentHp = playerMaxHp
+                reprint()
+                CharacterExp()
             }
             (R.id.btnRoll)->{
                 enemyRoll = (0..6).random()
@@ -200,6 +210,7 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
                 EnemyDo()
                 checker()
                 roll()
+                CharacterExp()
                 reprint()
             }
             (R.id.btnDefend)->{
@@ -207,6 +218,7 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
                 EnemyDo()
                 checker()
                 roll()
+                CharacterExp()
                 reprint()
             }
             (R.id.btnHeal)->{
@@ -214,9 +226,12 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
                 EnemyDo()
                 checker()
                 roll()
+                CharacterExp()
                 reprint()
             }
             (R.id.btnAgain)->{
+                val player = Player("UserInput")
+                player.Level = 1
                 finish()
                 startActivity(intent)
             }
@@ -228,7 +243,7 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
         binding.playerhp.setProgress(ProgPlayer.toInt())
         binding.txtPlayerHp.text = "$PlayerCurrentHp/$playerMaxHp"
         var ProgEnemy = 100.00*(EnemyCurrentHp.toDouble()/EnemyMaxHp.toDouble())
-        Log.d("PlayerProgress", ProgEnemy.toString())
+        Log.d("EnemyProgress", ProgEnemy.toString())
         binding.txtEnemyHp.text = "$EnemyCurrentHp/$EnemyMaxHp"
         binding.enemyhp.setProgress(ProgEnemy.toInt())
 
@@ -256,5 +271,31 @@ class GameDashBoard : AppCompatActivity(), View.OnClickListener {
         binding.btnAttack.isEnabled = false
         binding.btnDefend.isEnabled = false
         binding.btnHeal.isEnabled = false
+    }
+
+    fun CharacterExp(){
+        val player = Player("UserInput")
+        if(EnemyName != "") {
+            if (EnemyCurrentHp <= 0) {
+                PlayerExp += EnemyExp
+                if (PlayerExp > PlayerExpNeeded) {
+                    if ((PlayerExp - PlayerExpNeeded) == 0) {
+                        player.Level = player.Level + 1
+                        binding.PlayerLevel.text = "Level: ${player.Level}"
+                        PlayerExp = 0
+                        PlayerExpNeeded *= 2
+                        PlayerLevel = player.Level
+                    } else {
+                        player.Level = player.Level + 1
+                        binding.PlayerLevel.text = "Level: ${player.Level}"
+                        PlayerExp -= PlayerExpNeeded
+                        PlayerExpNeeded *= 2
+                        PlayerLevel = player.Level
+                    }
+                }
+            }
+        }
+        Log.d("Player Exp: ", PlayerExp.toString())
+        binding.PlayerLevel.text = "Level: $PlayerLevel"
     }
 }

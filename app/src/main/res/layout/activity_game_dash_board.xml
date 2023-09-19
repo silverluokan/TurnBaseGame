@@ -130,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="72dp"
-        android:text="TextView"
+        android:text="Enemy Roll"
         app:layout_constraintBottom_toBottomOf="@+id/enemyImage"
         app:layout_constraintEnd_toStartOf="@+id/enemyImage"
         app:layout_constraintTop_toTopOf="@+id/enemyImage"
@@ -141,7 +141,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
-        android:text="TextView"
+        android:text="Player Roll"
         app:layout_constraintBottom_toBottomOf="@+id/playerImage"
         app:layout_constraintStart_toEndOf="@+id/playerImage"
         app:layout_constraintTop_toTopOf="@+id/playerImage"
@@ -181,5 +181,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PlayerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="NAME"
+        app:layout_constraintBottom_toTopOf="@+id/playerImage"
+        app:layout_constraintEnd_toEndOf="@+id/playerImage"
+        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintStart_toStartOf="@+id/playerImage" />
+
+    <TextView
+        android:id="@+id/PlayerLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Level: 0"
+        app:layout_constraintEnd_toEndOf="@+id/txtPlayerHp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/txtPlayerHp"
+        app:layout_constraintTop_toBottomOf="@+id/txtPlayerHp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

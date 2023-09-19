@@ -5,5 +5,5 @@ data class Player(val Name: String){
     val Damage: Int = 5
     val Heal: Int = 6
     val DefensePoint: Int = 4
-    val Level: Int = 1
+    var Level: Int = 1
 }
